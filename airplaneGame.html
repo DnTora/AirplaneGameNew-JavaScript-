@@ -1,0 +1,159 @@
+<html>
+<canvas width = "800" height = "800" id = "AirplaneGame"></canvas>
+<script>
+var canvas;
+var cancasContext;
+var fps = 20;
+ 
+const space = 160; 
+
+var player;
+var block;
+var direction;
+
+ window.onload = function(){
+
+
+         canvas = document.getElementById("AirplaneGame");
+         canvasContext = canvas.getContext('2d');
+         //20 = size
+         player = new Player(canvas.width/2,canvas.height-20,20,20);
+         block  = new Block(0,0,canvas.width,80,5);
+         direction = new Direction();
+
+         setInterval(function(){
+
+           setUpdate();
+
+
+
+  },1000/fps);
+
+        window.addEventListener('keyup',function(evt){
+                          
+               direction.resetDirection(evt.keyCode);
+ 
+
+   });
+
+      window.addEventListener('keydown',function(evt){
+                          
+               direction.nodeDirection(evt.keyCode);              
+                         
+                                    
+  });
+};
+
+function setUpdate(){
+movement();
+draw();
+checkSpace();
+}
+function movement(){
+   blockMovement()            
+   playerMovement();
+   
+}
+function blockMovement(){
+
+     block.y += block.speed;
+
+}
+function playerMovement(){
+
+   if(direction.right == "true")
+           player.x += player.speed;
+   if(direction.left == "true")
+           player.x -= player.speed;
+   if(direction.down == "true")
+           player.y += player.speed;
+   if(direction.up == "true")
+           player.y -= player.speed;
+
+}
+function draw(){
+
+             buildRect(0,0,canvas.width,canvas.height,'black');
+             buildRect(player.x,player.y,player.size,player.size,player.color);
+             //left  block
+            ShapesOfBlock();
+
+}
+
+function checkSpace(){
+
+     var rand =  Math.floor((Math.random() * (canvas.width-80)) + 80);
+    
+      
+
+}
+
+function buildRect(left,top,width,height,color){
+         
+          canvasContext.fillStyle = color;
+          canvasContext.fillRect(left,top,width,height);
+
+}
+function Player(x,y,size,speed){
+   
+   this.x = x;
+   this.y = y;
+   this.size = size;
+   this.color = 'red';
+   this.speed = speed;
+
+}
+function Block(x,y,width,height,speed){
+   
+   this.x = x;
+   this.y = y;
+   this.width  = width;
+   this.height = height; 
+   this.color = 'green';
+   this.speed = speed;
+   this.blockright = 0;
+   this.blockleft  = 0; 
+
+}
+function Direction(){
+
+     this.right = "false";
+     this.left  = "false";
+     this.down  = "false";
+     this.up    = "false";
+    
+   
+     this.resetDirection = function(direction){
+      switch(direction){
+
+             case 37: this.left  = "false"; break;
+             case 38: this.up    = "false"; break;
+             case 39: this.right = "false"; break;
+             case 40: this.down  = "false"; breal;
+     
+    }
+  }
+     this.nodeDirection = function(direction){
+                 
+                switch(direction){
+                      case 39 : this.right = "true";  break;
+                      case 37 : this.left  = "true";  break;
+                      case 40 : this.down  = "true";  break;
+                      case 38 : this.up    = "true";  break;
+    
+    }
+  }
+}
+function ShapesOfBlock(){
+                
+             
+      
+                 //left
+                 buildRect(0,block.y,canvas.width-(space/2),block.height,block.color);
+                 //right
+                 buildRect(canvas.width-(space/2)+space,block.y,canvas.width-space/2,block.height,block.color);
+   
+
+}
+</script>
+</html>
